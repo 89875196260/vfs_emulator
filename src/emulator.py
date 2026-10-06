@@ -84,8 +84,26 @@ def cmd_uniq(vfs_data, current_path: str, arg: str):
             last = line
 
 
+def cmd_mkdir(vfs_data, current_path: str, arg: str):
+    """Создает новую директорию в памяти VFS."""
+    if not arg:
+        return
+    parent = find_node(vfs_data, current_path)
+    if parent and parent.get("type") == "dir" and arg not in parent["children"]:
+        parent["children"][arg] = {"type": "dir", "children": {}}
+
+
+def cmd_touch(vfs_data, current_path: str, arg: str):
+    """Создает пустой файл в памяти VFS."""
+    if not arg:
+        return
+    parent = find_node(vfs_data, current_path)
+    if parent and parent.get("type") == "dir" and arg not in parent["children"]:
+        parent["children"][arg] = {"type": "file", "content": ""}
+
+
 def handle_command(cmd_line: str, vfs_data, current_path: str):
-    """Маршрутизатор доступных команд для Этапа 4."""
+    """Маршрутизатор всех доступных команд эмулятора."""
     processed = os.path.expandvars(cmd_line.strip())
     if not processed:
         return True, current_path
@@ -105,11 +123,17 @@ def handle_command(cmd_line: str, vfs_data, current_path: str):
     elif cmd == "uniq":
         cmd_uniq(vfs_data, current_path, args[0] if args else None)
         return True, current_path
+    elif cmd == "mkdir":
+        cmd_mkdir(vfs_data, current_path, args[0] if args else None)
+        return True, current_path
+    elif cmd == "touch":
+        cmd_touch(vfs_data, current_path, args[0] if args else None)
+        return True, current_path
     return True, current_path
 
 
 def main() -> None:
-    """Главная точка входа в эмулятор для Этапа 4."""
+    """Главный цикл работы приложения (Финальная версия)."""
     vfs_path, _ = parse_args()
     vfs_data = load_vfs(vfs_path)
     vfs_name = os.path.basename(vfs_path) if vfs_path else DEFAULT_VFS
@@ -126,7 +150,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 
 
 
