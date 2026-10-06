@@ -1,0 +1,18 @@
+{
+  "type": "dir",
+  "children": {
+    "home": {
+      "type": "dir",
+      "children": {
+        "readme.txt": {
+          "type": "file",
+          "content": "Hello from virtual world!"
+        }
+      }
+    },
+    "bin": {
+      "type": "dir",
+      "children": {}
+    }
+  }
+}
